@@ -92,6 +92,7 @@ func returnAnimeSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(animeSearch.Results[0].MalId)
 	fmt.Println("body: ", string(body))
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(animeSearch)
 }
 
@@ -119,6 +120,7 @@ func returnSingleAnime(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err.Error())
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(animeSingle)
 }
 
