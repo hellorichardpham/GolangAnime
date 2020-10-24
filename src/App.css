@@ -1,0 +1,23 @@
+.SearchBar {
+  text-align: center;
+}
+
+ul.no-bullets {
+  list-style-type: none;
+  /* Remove bullets */
+  padding: 0;
+  /* Remove padding */
+  margin: 0;
+  /* Remove margins */
+}
+
+div.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+.SearchResult {
+  float: left;
+  text-align: center;
+}
