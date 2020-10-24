@@ -60,13 +60,13 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 func returnAnimeSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: returnAnimeSearch")
 	title := r.URL.Query().Get("title")
-	// limit := r.URL.Query().Get("limit")
-	apiSearchUrl := "https://api.jikan.moe/v3/search/anime?limit=10&"
+	limit := r.URL.Query().Get("limit")
+	apiSearchURL := "https://api.jikan.moe/v3/search/anime?limit=" + limit + "&"
 	params := url.Values{}
 	params.Add("q", title)
 	output := params.Encode()
-	fmt.Println("url request: " + apiSearchUrl + output)
-	resp, err := http.Get(apiSearchUrl + output)
+	fmt.Println("url request: " + apiSearchURL + output)
+	resp, err := http.Get(apiSearchURL + output)
 
 	if err != nil {
 		panic(err)
@@ -90,11 +90,11 @@ func returnAnimeSearch(w http.ResponseWriter, r *http.Request) {
 
 func returnSingleAnime(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	malId := vars["id"]
+	malID := vars["id"]
 
-	apiAnimeUrl := "https://api.jikan.moe/v3/anime/" + malId
-	fmt.Println("apiAnimeUrl: " + apiAnimeUrl)
-	resp, err := http.Get(apiAnimeUrl)
+	apiAnimeURL := "https://api.jikan.moe/v3/anime/" + malID
+	fmt.Println("apiAnimeURL: " + apiAnimeURL)
+	resp, err := http.Get(apiAnimeURL)
 
 	if err != nil {
 		panic(err)

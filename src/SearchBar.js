@@ -22,14 +22,13 @@ class SearchBar extends React.Component {
       //const { title, animes, error } = this.state;
       return (
         <div className="SearchBar">
-          <form>
             Title: <input type='text'
               name='title'
               value={this.state.title}
               onChange={this._handleOnChange}
               onKeyDown={this._handleKeyDown}
             />
-          </form>
+            <br></br>
           <input type="submit" value="Search" onClick={() => this.props.onClick(this.state.title)} />
         </div>
       );

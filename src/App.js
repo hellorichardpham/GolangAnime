@@ -16,7 +16,7 @@ class Search extends React.Component {
   }
 
   handleSearchAction = (title) => {
-    fetch("http://localhost:10000/search?title=" + encodeURI(title))
+    fetch("http://localhost:10000/search?limit=20&title=" + encodeURI(title))
       .then(res => res.json())
       .then(
         (result) => {
@@ -105,8 +105,6 @@ function SearchResult(props) {
   return (
     <div className="SearchResult">
       <img src={props.imageUrl} alt="" onClick={() => props.onClick(props.malId)}></img>
-      <br></br>
-      {props.title}
     </div>
   )
 }
