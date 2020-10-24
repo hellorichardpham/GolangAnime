@@ -52,15 +52,6 @@ func getAnime(body []byte) (*Anime, error) {
 	return s, err
 }
 
-type Article struct {
-	Id      string `json:"Id"`
-	Title   string `json:"Title"`
-	Desc    string `json:"desc"`
-	Content string `json:"content"`
-}
-
-var Articles []Article
-
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to the homepage!")
 	fmt.Println("Endpoint Hit: homepage")

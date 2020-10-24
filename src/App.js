@@ -1,9 +1,10 @@
 import React from 'react';
+import SearchBar from './SearchBar'
 import './App.css';
 
 
 
-class Parent extends React.Component {
+class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +14,7 @@ class Parent extends React.Component {
     }
   }
 
-  handleClick = (title) => {
+  handleSearchAction = (title) => {
     fetch("http://localhost:10000/search?title=" + encodeURI(title))
       .then(res => res.json())
       .then(
@@ -34,9 +35,32 @@ class Parent extends React.Component {
       )
   }
 
+  handleAnimeSelected = (malId) => {
+    console.log('I am starting handleAnimeSelected with malId: ' + malId);
+    fetch("http://localhost:10000/anime/" + malId)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log("result: " + JSON.stringify(result))
+          this.setState({
+            selectedAnime: result
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            error: true
+          });
+        }
+      )    
+  }
+
   render() {
-    const { animes, error } = this.state;
+    const { animes, selectedAnime, error } = this.state;
     console.log('I am rendering with the state animes: ' + this.state.animes);
+    console.log('I am rendering with the state selectedAnime: ' + this.state.selectedAnime.title_english);
     if (error) {
       return (
         <div>There was an error.</div>
@@ -45,69 +69,72 @@ class Parent extends React.Component {
       return (
         <div className="parent">
           <SearchBar
-            onClick={title => this.handleClick(title)}
+            onClick={title => this.handleSearchAction(title)}
           />
+          <div className="searchResultsContainer">
           <ul className="no-bullets">
             {animes.map(anime => (
               <li key={anime.mal_id}>
-                <SearchResult title={anime.title}
+                <SearchResult malId={anime.mal_id}
+                  title={anime.title}
                   url={anime.url}
-                  image_url={anime.image_url} />
+                  imageUrl={anime.image_url}
+                  onClick={malId => this.handleAnimeSelected(malId)} />
               </li>
             ))}
           </ul>
+          </div>
+          <AnimeResult
+            malId={selectedAnime.mal_id} 
+            imageUrl={selectedAnime.image_url}
+            title={selectedAnime.title}
+            titleEnglish={selectedAnime.title_english}
+            score={selectedAnime.score}
+            scoredBy={selectedAnime.scored_by}
+            rank={selectedAnime.rank}
+            popularity={selectedAnime.popularity}
+          />
         </div>
       );
     }
   }
 }
 
-class SearchBar extends React.Component {
-
-  state = {
-    title: '',
-  }
-
-  _handleOnChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
-
-  _handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      console.log('Enter has been pressed');
-      this.props.onClick(this.state.title);
-    }
-  }
-
-  render() {
-    //const { title, animes, error } = this.state;
-    return (
-      <div className="SearchBar">
-        <form>
-          Title: <input type='text'
-            name='title'
-            value={this.state.title}
-            onChange={this._handleOnChange}
-            onKeyDown={this._handleKeyDown}
-          />
-        </form>
-        <input type="submit" value="submit" onClick={() => this.props.onClick(this.state.title)} />
-      </div>
-    );
-  }
+function SearchResultContainer(props) {
+  
 }
 
 function SearchResult(props) {
-  const imageClick = () => {
-    console.log('clicked');
-  }
   return (
     <div className="SearchResult">
-      <img src={props.image_url} onClick={() => imageClick()}></img>
+      <img src={props.imageUrl} alt="" onClick={() => props.onClick(props.malId)}></img>
       <br></br>
       {props.title}
     </div>
   )
 }
 
-export default Parent;
+function AnimeResult(props) {
+  console.log('props.malId: ' + props.malId);
+  if (props.malId !== undefined) {
+    return (
+      <div className="AnimeResult">
+        Selected Anime: {props.title}
+        <br></br>
+        <img src={props.imageUrl} alt=""></img>
+        Score: {props.score}
+        <br></br>
+        ScoredBy: {props.scoredBy}
+        <br></br>
+        Rank: {props.rank}
+        <br></br>
+        Popularity: {props.popularity}
+      </div>
+    )
+  } else {
+    return null;
+  }
+  
+}
+
+export default Search;
