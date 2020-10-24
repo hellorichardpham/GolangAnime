@@ -60,7 +60,8 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 func returnAnimeSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: returnAnimeSearch")
 	title := r.URL.Query().Get("title")
-	apiSearchUrl := "https://api.jikan.moe/v3/search/anime?limit=2&"
+	// limit := r.URL.Query().Get("limit")
+	apiSearchUrl := "https://api.jikan.moe/v3/search/anime?limit=10&"
 	params := url.Values{}
 	params.Add("q", title)
 	output := params.Encode()
