@@ -2,15 +2,6 @@
   text-align: center;
 }
 
-ul.no-bullets {
-  list-style-type: none;
-  /* Remove bullets */
-  padding: 0;
-  /* Remove padding */
-  margin: 0;
-  /* Remove margins */
-}
-
 div.column {
   float: left;
   width: 33.33%;
@@ -19,4 +10,18 @@ div.column {
 
 .SearchResult {
   text-align: center;
+}
+
+div.Polaroid {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+div.Container {
+  text-align: center;
+}
+
+.TestImg {
+  box-shadow:5px 5px 5px #999;
 }

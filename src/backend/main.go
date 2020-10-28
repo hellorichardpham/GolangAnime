@@ -216,6 +216,13 @@ func returnMainCharacters(w http.ResponseWriter, r *http.Request) {
 func returnPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	malID := vars["id"]
+	// malID, _ := strconv.Atoi(vars["id"])
+
+	// person, err := jikan.GetPerson(malID)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println(anime.Title)
 
 	apiPersonURL := "https://api.jikan.moe/v3/person/" + malID
 	fmt.Println("apiPersonURL: " + apiPersonURL)
@@ -238,7 +245,8 @@ func returnPerson(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	fmt.Println("person ", person)
+	fmt.Println("person ", person.MalID)
+	fmt.Println("person ", person.Name)
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(person)
@@ -250,7 +258,8 @@ func handleRequests() {
 	myRouter.HandleFunc("/search", returnAnimeSearch)
 	myRouter.HandleFunc("/anime/{id}", returnSingleAnime)
 	myRouter.HandleFunc("/anime/{id}/mainCharacters", returnMainCharacters)
-	myRouter.HandleFunc("/person/{id}", returnPerson)
+	myRouter.HandleFunc("/thisisatest/{id}", returnPerson)
+
 	log.Fatal(http.ListenAndServe(":10000", myRouter))
 }
 
