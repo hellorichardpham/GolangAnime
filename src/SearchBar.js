@@ -3,36 +3,40 @@ import './App.css';
 
 class SearchBar extends React.Component {
 
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       title: '',
     }
-  
-    _handleOnChange = (event) => {
-      this.setState({ [event.target.name]: event.target.value })
-    }
-  
-    _handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        console.log('Enter has been pressed');
-        this.props.onClick(this.state.title);
-      }
-    }
-  
-    render() {
-      //const { title, animes, error } = this.state;
-      return (
-        <div className="SearchBar">
-            Title: <input type='text'
-              name='title'
-              value={this.state.title}
-              onChange={this._handleOnChange}
-              onKeyDown={this._handleKeyDown}
-            />
-            <br></br>
-          <input type="submit" value="Search" onClick={() => this.props.onClick(this.state.title)} />
-        </div>
-      );
+    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._handleOnChange = this._handleOnChange.bind(this);
+
+  }
+
+  _handleOnChange = (event) => {
+    this.setState({ 'title': event.target.value })
+  }
+
+  _handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log('Enter has been pressed');
+      this.props.onClick(this.state.title);
     }
   }
 
-  export default SearchBar;
+  render() {
+    return (
+      <div className="wrap">
+        <div className="search">
+          <input type="text" className="searchTerm" placeholder="Search for an anime title" onChange={this._handleOnChange} onKeyDown={this._handleKeyDown}/>
+          <button type="submit" className="searchButton" onClick={() => this.props.onClick(this.state.title)} >
+            <i className="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default SearchBar;
+
