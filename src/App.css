@@ -25,3 +25,10 @@ div.Container {
 .TestImg {
   box-shadow:5px 5px 5px #999;
 }
+
+.truncate {
+  width: 225px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
