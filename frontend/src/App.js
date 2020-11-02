@@ -25,7 +25,7 @@ class Search extends React.Component {
   }
 
   handleSearchAction = (title) => {
-    fetch("http://localhost:10000/search?limit=5&title=" + encodeURI(title))
+    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/search?limit=5&title=" + encodeURI(title))
       .then(res => res.json())
       .then(
         (result) => {
@@ -54,7 +54,7 @@ class Search extends React.Component {
 
     this.numSelected++;
     console.log('I am starting handleAnimeSelected with malId: ' + malId);
-    fetch("http://localhost:10000/anime/" + malId)
+    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/anime/" + malId)
       .then(res => res.json())
       .then(
         (result) => {
@@ -73,7 +73,7 @@ class Search extends React.Component {
         }
       )
 
-    fetch("http://localhost:10000/anime/" + malId + "/mainCharacters")
+    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/anime/" + malId + "/mainCharacters")
       .then(res => res.json())
       .then(
         (result) => {
@@ -103,7 +103,7 @@ class Search extends React.Component {
       var urls = [];
       mainCharacter.forEach(function (character) {
         var characterVoiceActors = character.voice_actors[0];
-        var url = 'http://localhost:10000/thisisatest/' + characterVoiceActors.mal_id;
+        var url = 'https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/thisisatest/' + characterVoiceActors.mal_id;
         urls.push(url);
       })
       this.requestAllWithDelay(urls, 200).then(
