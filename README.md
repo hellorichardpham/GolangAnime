@@ -11,5 +11,12 @@ A React frontend.
 
 This is my first foray into these 4 technologies so I'm taking this as more of a learning experience and learning better practices as the project continues to evolve.
 
+Build and run the containers with `docker-compose` 🐳:
+
+```bash
+$ docker-compose build
+$ docker-compose up -d
+```
+
 Jikan API:
 https://jikan.moe
