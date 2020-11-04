@@ -28,7 +28,7 @@ class SearchBar extends React.Component {
     return (
       <div className="wrap">
         <div className="search">
-          <input type="text" className="searchTerm" placeholder="Search for an anime title to begin comparing..." onChange={this._handleOnChange} onKeyDown={this._handleKeyDown} autoFocus/>
+          <input type="text" className="searchTerm" placeholder="Select at least two anime titles to begin comparing..." onChange={this._handleOnChange} onKeyDown={this._handleKeyDown} autoFocus/>
           <button type="submit" className="searchButton" onClick={() => this.props.onClick(this.state.title)} >
             <i className="fa fa-search"></i>
           </button>

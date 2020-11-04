@@ -16,22 +16,25 @@ class Search extends React.Component {
       isDoneLoading: false,
     }
     this.addVoiceActor = this.addVoiceActor.bind(this);
-    // this.handleComparisonV2 = this.handleComparisonV2.bind(this);
     this.handleAnimeSelected = this.handleAnimeSelected.bind(this);
     this.getHTML = this.getHTML.bind(this);
-    this.getHTML2 = this.getHTML2.bind(this);
     this.doShowComparison = this.doShowComparison.bind(this);
     this.doReset = this.doReset.bind(this);
+    this.apiURL = "http://localhost:10000";
+    console.log('this.apiURL: ' + this.apiURL);
   }
 
   handleSearchAction = (title) => {
-    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/search?limit=5&title=" + encodeURI(title))
+    if (title) {
+      console.log(this.apiURL + "/search?limit=5&title=" + encodeURI(title));
+      fetch(this.apiURL + "/search?limit=5&title=" + encodeURI(title))
       .then(res => res.json())
       .then(
         (result) => {
           // console.log("result: " + JSON.stringify(result["results"]))
           this.setState({
-            animes: result["results"]
+            animes: result["results"],
+            isDoneLoading: true
           });
         },
         // Note: it's important to handle errors here
@@ -44,9 +47,16 @@ class Search extends React.Component {
           });
         }
       )
+    } else {
+      console.log('title is null or undefined: ' + title);
+    }
   }
 
   handleAnimeSelected = (malId) => {
+    if (!this.state.isDoneLoading) {
+      alert("HOLD UP. We're being rate limited by a 3rd party API and need more time before selectiong another anime.");
+      return;
+    }
     this.setState({
       isDoneLoading: false,
       showComparison: false
@@ -54,7 +64,7 @@ class Search extends React.Component {
 
     this.numSelected++;
     console.log('I am starting handleAnimeSelected with malId: ' + malId);
-    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/anime/" + malId)
+    fetch(this.apiURL + "/anime/" + malId)
       .then(res => res.json())
       .then(
         (result) => {
@@ -73,7 +83,7 @@ class Search extends React.Component {
         }
       )
 
-    fetch("https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/anime/" + malId + "/mainCharacters")
+    fetch(this.apiURL + "/anime/" + malId + "/mainCharacters")
       .then(res => res.json())
       .then(
         (result) => {
@@ -98,12 +108,13 @@ class Search extends React.Component {
     if (mainCharacter === undefined) {
       return;
     }
-    console.log('I am in handle comparison this is where I need to be.')
     if (mainCharacter.length > 0) {
       var urls = [];
-      mainCharacter.forEach(function (character) {
+      console.log('this: ' + this);
+      mainCharacter.forEach(character => {
+        console.log('this2: ' + this);
         var characterVoiceActors = character.voice_actors[0];
-        var url = 'https://seiyuu-starpower-service-vkryztv2qa-uw.a.run.app/thisisatest/' + characterVoiceActors.mal_id;
+        var url = this.apiURL + '/thisisatest/' + characterVoiceActors.mal_id;
         urls.push(url);
       })
       this.requestAllWithDelay(urls, 200).then(
@@ -146,40 +157,13 @@ class Search extends React.Component {
     })
   }
 
-  getHTML = (mainCharacters, persons, index) => {
-    let content = [];
-    if (mainCharacters.length === persons.length) {
-      console.log('getHTML. index: ' + index)
-      console.log('characters: ' + JSON.stringify(this.state.mainCharacters[index]))
-      console.log('persons: ' + JSON.stringify(this.state.persons[index]))
-      var i, j;
-      for (i = 0; i < mainCharacters.length; i++) {
-        for (j = 0; j < mainCharacters[i].length; j++) {
-          let character = mainCharacters[i][j];
-          let person = persons[i][j];
-          content.push(
-            <Flex container margin="10px auto" flexWrap="wrap">
-              <NewCharacter
-                character={character}
-                person={person}
-              />
-            </Flex>
-          );
-        }
-      }
-    } else {
-      console.log('main characters and persons is not the same length');
-    }
-    return content;
-  }
-
-  getHTML2 = (index) => {
+  getHTML = (index) => {
     let content = [];
     let mainCharacters = this.state.mainCharacters[index];
     let persons = this.state.persons[index];
     let totalFavorites = 0;
     if ((mainCharacters !== undefined && persons !== undefined) && (mainCharacters.length === persons.length)) {
-      console.log('getHTML2. index: ' + index)
+      console.log('getHTML. index: ' + index)
       console.log('characters: ' + JSON.stringify(this.state.mainCharacters[index]))
       console.log('persons: ' + JSON.stringify(this.state.persons[index]))
       var i;
@@ -213,7 +197,7 @@ class Search extends React.Component {
         showComparison: true
       });
     } else {
-      alert("HOLD UP. Your boy is getting rate limited and isn't ready to compare yet.");
+      alert("HOLD UP. We're being rate limited by a 3rd party API and are not ready to compare yet.");
     }
   }
 
@@ -257,7 +241,7 @@ class Search extends React.Component {
           </Flex>
           <Flex container justifyContent="center" alignItems="center">
             <button className="pure-material-button-contained" onClick={this.doShowComparison}>Compare</button>
-            <button className="pure-material-button-contained" onClick={this.doReset}>Reset</button>
+            <button className="pure-material-button-reset" onClick={this.doReset}>Reset</button>
           </Flex>
           <Flex container justifyContent="space-around" alignItems="center">
             {selectedAnimes.map(anime => (
@@ -295,7 +279,7 @@ class Search extends React.Component {
           </Flex>
           <Flex container alignItems="flex-start" justifyContent="center" alignItems="center">
             <button className="pure-material-button-contained" onClick={this.doShowComparison}>Compare</button>
-            <button className="pure-material-button-contained" onClick={this.doReset}>Reset</button>
+            <button className="pure-material-button-reset" onClick={this.doReset}>Reset</button>
           </Flex>
           <Flex container alignItems="flex-start" justifyContent="space-around" alignItems="center">
             {selectedAnimes.map(anime => (
@@ -316,7 +300,7 @@ class Search extends React.Component {
           <Flex container flexDirection="row" margin="10px auto" flexWrap="wrap">
             {mainCharacters.map((value, index) => (
               <Flex container flexDirection="column" margin="10px auto" flexWrap="wrap">
-                {this.getHTML2(index)}
+                {this.getHTML(index)}
               </Flex>
             ))}
           </Flex>
