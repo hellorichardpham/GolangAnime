@@ -1,4 +1,4 @@
-# SeiyuuStarPower
+# Seiyuu Star Power
 
 Skills used:
 React, Golang (Go), Docker, Google Cloud Platform
